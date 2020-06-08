@@ -1,8 +1,7 @@
 # zedge-backend
 Technical task for Zedge
 
-Main features
-Created Artist API for searching artists, saving favorite artists and getting favorite albums
+* Created Artist API for searching artists, saving favorite artists and getting favorite albums
 
 Artist API
 
