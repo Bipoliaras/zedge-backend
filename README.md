@@ -3,8 +3,6 @@ Technical task for Zedge
 
 * Created Artist API for searching artists, saving favorite artists and getting favorite albums
 
-Artist API
-
 Method  | Path | Explanation
 ------------- | ------------- | ------------- |
 GET  | /albums?userId={id} | Get favorite albums for artist with userId  |
