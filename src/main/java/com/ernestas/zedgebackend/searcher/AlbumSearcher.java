@@ -27,7 +27,7 @@ public class AlbumSearcher {
     this.itunesGateway = itunesGateway;
   }
 
-  @Scheduled(initialDelayString = "${zedge.backend.album.updater.initial.delay:300000}",
+  @Scheduled(initialDelayString = "${zedge.backend.album.updater.initial.delay:60000}",
       fixedDelayString = "${zedge.backend.album.updater.fixed.delay:900000}")
   @Transactional
   public void searchAlbums() {
