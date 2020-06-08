@@ -12,8 +12,4 @@ public class WebException extends RuntimeException {
     super(message);
   }
 
-  public WebException(String message, Throwable throwable) {
-    super(message, throwable);
-  }
-
 }

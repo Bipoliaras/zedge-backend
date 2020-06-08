@@ -2,6 +2,8 @@ package com.ernestas.zedgebackend.itunes;
 
 import com.ernestas.zedgebackend.persistence.album.Album;
 import com.ernestas.zedgebackend.persistence.artist.Artist;
+import com.ernestas.zedgebackend.persistence.request.RequestType;
+import com.ernestas.zedgebackend.request.RequestService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -26,9 +28,17 @@ public class ItunesGateway {
 
   private static final Logger logger = LoggerFactory.getLogger(ItunesGateway.class);
 
-  public List<Album> getAlbums(Long artistId) {
-    try {
+  private final RequestService requestService;
 
+  public ItunesGateway(RequestService requestService) {
+    this.requestService = requestService;
+  }
+
+  public List<Album> getAlbumsByArtistId(Long artistId) {
+    requestService.checkIfRequestAmountExceeded();
+    requestService.saveRequest(RequestType.ALBUM_SEARCH);
+
+    try {
       String response = restTemplate.getForObject(
           "https://itunes.apple.com/lookup?id=" + artistId + "&entity=album&limit=5",
           String.class);
@@ -46,7 +56,10 @@ public class ItunesGateway {
     return Collections.emptyList();
   }
 
-  public List<Artist> searchArtists(String artistName) {
+  public List<Artist> searchArtistsByArtistName(String artistName) {
+    requestService.checkIfRequestAmountExceeded();
+    requestService.saveRequest(RequestType.ARTIST_SEARCH);
+
     String response = restTemplate
         .getForObject("https://itunes.apple.com/search?entity=allArtist&term=" + artistName,
             String.class);

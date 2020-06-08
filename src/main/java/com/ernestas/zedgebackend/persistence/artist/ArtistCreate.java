@@ -1,21 +1,17 @@
 package com.ernestas.zedgebackend.persistence.artist;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "t_artist")
-public class Artist {
+public class ArtistCreate {
 
-  @Id
   @NotNull
   private Long artistId;
   @NotNull

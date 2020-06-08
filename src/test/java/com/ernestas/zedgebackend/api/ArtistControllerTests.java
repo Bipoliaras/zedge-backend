@@ -1,9 +1,11 @@
-package com.ernestas.zedgebackend;
+package com.ernestas.zedgebackend.api;
 
 import static com.ernestas.zedgebackend.json.ResponseExamples.albumsJsonExample;
 import static com.ernestas.zedgebackend.json.ResponseExamples.artistsJsonExample;
 
+import com.ernestas.zedgebackend.ITBase;
 import com.ernestas.zedgebackend.persistence.artist.Artist;
+import com.ernestas.zedgebackend.persistence.artist.ArtistCreate;
 import com.ernestas.zedgebackend.persistence.artist.ArtistRepository;
 import com.ernestas.zedgebackend.persistence.user.User;
 import com.ernestas.zedgebackend.persistence.user.UserRepository;
@@ -60,6 +62,7 @@ public class ArtistControllerTests extends ITBase {
         .then()
         .log().all()
         .statusCode(200);
+
   }
 
   @Test
@@ -73,7 +76,7 @@ public class ArtistControllerTests extends ITBase {
         .accept(ContentType.JSON)
         .queryParam("userId", user.getId())
         .body(
-            Artist.builder().artistId(10L).build()
+            ArtistCreate.builder().artistId(10L).artistName("Kendrick").build()
         )
         .post("/artists")
         .then()

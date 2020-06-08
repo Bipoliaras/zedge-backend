@@ -1,4 +1,4 @@
-package com.ernestas.zedgebackend;
+package com.ernestas.zedgebackend.searcher;
 
 
 import com.ernestas.zedgebackend.itunes.ItunesGateway;
@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AlbumUpdater {
+public class AlbumSearcher {
 
   private final AlbumRepository albumRepository;
 
@@ -20,27 +20,28 @@ public class AlbumUpdater {
 
   private final ItunesGateway itunesGateway;
 
-  public AlbumUpdater(AlbumRepository albumRepository,
+  public AlbumSearcher(AlbumRepository albumRepository,
       UserRepository userRepository, ItunesGateway itunesGateway) {
     this.albumRepository = albumRepository;
     this.userRepository = userRepository;
     this.itunesGateway = itunesGateway;
   }
 
-  @Scheduled(fixedDelay = 10000, initialDelay = 5000)
+  @Scheduled(initialDelayString = "${zedge.backend.album.updater.initial.delay:300000}",
+      fixedDelayString = "${zedge.backend.album.updater.fixed.delay:900000}")
   @Transactional
-  public void updateAlbumsForArtists() {
-
+  public void searchAlbums() {
     userRepository.findAllUniqueArtistIds()
         .stream()
         .filter(Objects::nonNull)
-        .forEach(
-            artistId ->
-            {
-              List<Album> albums = albumRepository.findAllByArtistId(artistId);
-              albumRepository.deleteAll(albums);
-              albumRepository.saveAll(itunesGateway.getAlbums(artistId));
-            }
-        );
+        .forEach(this::saveAlbumsForArtistId);
+  }
+
+  public void saveAlbumsForArtistId(Long artistId) {
+    List<Album> albums = albumRepository.findAllByArtistId(artistId);
+    //only save top 5 albums if none exist
+    if (albums == null || albums.isEmpty()) {
+      albumRepository.saveAll(itunesGateway.getAlbumsByArtistId(artistId));
+    }
   }
 }

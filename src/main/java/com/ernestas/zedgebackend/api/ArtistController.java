@@ -3,6 +3,7 @@ package com.ernestas.zedgebackend.api;
 import com.ernestas.zedgebackend.itunes.ItunesArtistService;
 import com.ernestas.zedgebackend.persistence.album.Album;
 import com.ernestas.zedgebackend.persistence.artist.Artist;
+import com.ernestas.zedgebackend.persistence.artist.ArtistCreate;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,8 +36,8 @@ public class ArtistController {
   }
 
   @PostMapping
-  public Artist saveFavoriteArtist(@RequestParam("userId") Long userId, @Valid @RequestBody Artist artist) {
-    return itunesArtistService.saveArtist(userId, artist);
+  public Artist saveFavoriteArtist(@RequestParam("userId") Long userId, @RequestBody @Valid ArtistCreate artistCreate) {
+    return itunesArtistService.saveArtist(userId, artistCreate);
   }
 
 
